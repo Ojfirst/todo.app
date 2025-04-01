@@ -20,7 +20,10 @@ function addTask(event) {
                             <button class="delete-btn">Delete</button>`
 
     taskList.appendChild(taskItem);
-    taskInput.value = '';          
+    taskInput.value = '';  
+    
+    //save to local storage
+    saveTasks()
 }
 
 // Function for completion and deletion
@@ -32,6 +35,20 @@ function taskListManager(e) {
     if (target.classList.contains('delete-btn')) {  
         taskItem.remove();
     } else if (target.tagName === 'SPAN') { // Detect if its a span element
-        target.classList.toggle('completed');
+        taskItem.classList.toggle('completed');
     }
+
+    // Save to local storage
+    saveTasks();
+}
+
+function saveTasks() {
+    const tasks = [];
+    document.querySelectorAll('.task-item').forEach((task) => {
+      tasks.push({
+                  text: task.querySelector('span').textContent,
+                  completed: task.classList.contains('completed')
+                })
+    } )
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
