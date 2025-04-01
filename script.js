@@ -1,11 +1,11 @@
 // Add task to the list when form is submitted
-const taskForm = document.getElementById('task-form')
-const taskInput= document.getElementById('task-input')
-const taskList = document.getElementById('task-list')
+const taskForm = document.getElementById('task-form')   // task form
+const taskInput= document.getElementById('task-input') // task input
+const taskList = document.getElementById('task-list') // unorder list
 
 // EventListener
-taskForm.addEventListener('submit', addTask);
-taskList.addEventListener('click', taskListManager);
+taskForm.addEventListener('submit', addTask);   // form eventListener
+taskList.addEventListener('click', taskListManager);    // list eventListener
 
 // Function for adding task
 function addTask(event) {
@@ -13,14 +13,14 @@ function addTask(event) {
 
     const taskText = taskInput.value.trim()
     // List Element for task
-    let taskItem = document.createElement('li');
-    taskItem.setAttribute('class', 'task-item')
+    let taskItem = document.createElement('li');    //List item created
+    taskItem.setAttribute('class', 'task-item')     // list class set
     // 
     taskItem.innerHTML = `<span>${taskText}</span>
-                            <button class="delete-btn">Delete</button>`
+                            <button class="delete-btn">Delete</button>` // delete button created
 
-    taskList.appendChild(taskItem);
-    taskInput.value = '';  
+    taskList.appendChild(taskItem); // append to unorder element
+    taskInput.value = '';  // reset input space on click of add task
     
     //save to local storage
     saveTasks()
@@ -28,13 +28,13 @@ function addTask(event) {
 
 // Function for completion and deletion
 function taskListManager(e) {
-    const target = e.target;
-    const taskItem = target.closest('.task-item');
+    const target = e.target; // target set
+    const taskItem = target.closest('.task-item');  // target the parent <li>
 
     // Check if it has a class attribute is delete
     if (target.classList.contains('delete-btn')) {  
         taskItem.remove();
-    } else if (target.tagName === 'SPAN') { // Detect if its a span element
+    } else if (target.tagName === 'SPAN') { // Detect if it a span element
         taskItem.classList.toggle('completed');
     }
 
@@ -52,3 +52,27 @@ function saveTasks() {
     } )
     localStorage.setItem('tasks', JSON.stringify(tasks));
 }
+
+
+function loadTasks() {
+    //Get saved tasks or empty arraymif none exist
+    const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    
+    //clear existing tasks before rebuilding
+    taskList.innerHTML = '';
+
+    // Rebuilding the DOM
+    savedTasks.forEach(task => {
+        const taskItem = document.createElement('li');
+
+        taskItem.className = `task-item ${task.completed ? 'completed' : ''}`;
+        taskItem.innerHTML = `
+            <span>${task.text}</span>
+            <button class="delete-btn">Delete</button>`;
+
+        taskList.appendChild(taskItem);
+    
+    })
+}
+
+document.addEventListener('DOMContentLoaded', loadTasks);
