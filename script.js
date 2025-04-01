@@ -17,19 +17,21 @@ function addTask(event) {
     taskItem.setAttribute('class', 'task-item')
     // 
     taskItem.innerHTML = `<span>${taskText}</span>
-                <button class="delete-btn">Delete</button>`
+                            <button class="delete-btn">Delete</button>`
 
     taskList.appendChild(taskItem);
     taskInput.value = '';          
 }
 
+// Function for completion and deletion
 function taskListManager(e) {
     const target = e.target;
     const taskItem = target.closest('.task-item');
 
-    if (target.classList.contains('delete-btn')) {
+    // Check if it has a class attribute is delete
+    if (target.classList.contains('delete-btn')) {  
         taskItem.remove();
-    } else if (target.tageName === 'span') {
-        target.classList.toggle('completed')
+    } else if (target.tagName === 'SPAN') { // Detect if its a span element
+        target.classList.toggle('completed');
     }
 }

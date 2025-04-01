@@ -3,6 +3,7 @@
     --primary: #3a86ff;
     --danger: #ff006e;
     --light: #f8f9fa;
+    --done: #008000;
   }
   
   Body {
@@ -59,9 +60,10 @@
     Border-bottom: 1px solid #eee;
   }
   
-  .task-item.completed {
+  .completed {
     Opacity: 0.7;
     Text-decoration: line-through;
+    color: var(--done);
   }
   
   .delete-btn {
