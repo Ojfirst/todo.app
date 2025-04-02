@@ -3,9 +3,12 @@ const taskForm = document.getElementById('task-form')   // task form
 const taskInput= document.getElementById('task-input') // task input
 const taskList = document.getElementById('task-list') // unorder list
 
-// EventListener
+
+// EVENT LISTENER
 taskForm.addEventListener('submit', addTask);   // form eventListener
 taskList.addEventListener('click', taskListManager);    // list eventListener
+
+
 
 // Function for adding task
 function addTask(event) {
@@ -26,7 +29,8 @@ function addTask(event) {
     saveTasks()
 }
 
-// Function for completion and deletion
+
+// Function for completion and deletion task
 function taskListManager(e) {
     const target = e.target; // target set
     const taskItem = target.closest('.task-item');  // target the parent <li>
@@ -42,6 +46,17 @@ function taskListManager(e) {
     saveTasks();
 }
 
+
+// EVENT LISTENER FOR SAVE/CANCEL
+taskList.addEventListener('click', (e) => {
+    if (e.target.classList.contains('save-btn')) {
+        handleSave(e);
+    } else if (e.target.classList.contains('cancel-btn')) {
+        handleCancel(e);
+    }
+})
+
+
 function saveTasks() {
     const tasks = [];
     document.querySelectorAll('.task-item').forEach((task) => {
@@ -55,7 +70,7 @@ function saveTasks() {
 
 
 function loadTasks() {
-    //Get saved tasks or empty arraymif none exist
+    //Get saved tasks or empty array if none exist
     const savedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
     
     //clear existing tasks before rebuilding
@@ -75,4 +90,97 @@ function loadTasks() {
     })
 }
 
+
+// EVENT LISTENER  FOR EDIT-MODE
+taskList.addEventListener('dblclick', (e) => {
+    if (e.target.tagName === 'SPAN') {
+        enterEditMode(e.target.closest('.task-item'))
+    }
+})
+
+
+//  Edit-mode function 
+function enterEditMode(taskItem) {
+    // Get current task text
+    const currentText = taskItem.querySelector('span').textContent; 
+    taskItem.setAttribute('data-original-text', currentText);   // Store value
+
+    taskItem.classList.add('edit-mode') // Add visual effect
+
+    taskItem.innerHTML = `
+        <input class="edit-input" type="text" value="${currentText}"> 
+        <button class="save-btn">Save</button>
+        <button class="cancel-btn">Cancel</button>
+    `;
+    // Auto-focus the input field (ux improvement) 
+    taskItem.querySelector('.edit-mode').focus();
+}
+
+
+
+function handleSave(e) {
+    const taskItem = e.target.closest('.task-item'); // gets the parent node
+    const editInput = document.querySelector('.edit-input');  // gets the input element 
+    const editedText = editInput.value.trim() ; // gets user's input value and remove whitespace
+
+    //Removes edit-mode
+    taskItem.classList.remove('edit-mode')
+    // Add update user's value
+    taskItem.innerHTML = `
+            <span>${editedText}</span>
+            <button class="delete-btn">Delete</button>`;
+
+    //Update localStorage
+    saveTasks();
+}
+
+function handleCancel(e) {
+    const taskItem = e.target.closest('.task-item'); // Fix selector
+    const originalText = taskItem.getAttribute('data-original-text'); //Get stored text
+
+    //Remove edit-mode
+    taskItem.classList.remove('edit-mode');
+    //Return previous task
+    taskItem.innerHTML = `
+            <span>${originalText}</span>
+            <button class="delete-btn">Delete</button>`;
+
+}
+
+
+
+
+
+
+// Load saved tasks on page load
 document.addEventListener('DOMContentLoaded', loadTasks);
+
+
+
+
+
+
+
+
+
+
+
+
+
+// function handleTaskDoubleClick(e) {
+//     // Condition gets content to be edited
+//     if (e.target.tagName === 'SPAN') {
+//         const taskItem = e.target.closest('.task-item'); // 
+//         const currentText = e.target.textContent; // 
+
+//         //Add edit mode
+//         taskItem.classList.add('edit-mode'); // add a class edit for simple toggle
+//         // Build edit mode
+//         // retain current text before editing
+//         taskItem.innerHTML = `
+//         <input class="edit-input" type="text" value="${currentText}"> 
+//         <button class="save-btn">Save</button>
+//         <button class="cancel-btn">Cancel</button>`;
+//     }
+    
+// }
