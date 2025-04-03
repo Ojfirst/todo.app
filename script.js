@@ -9,6 +9,23 @@ taskForm.addEventListener('submit', addTask);   // form eventListener
 taskList.addEventListener('click', taskListManager);    // list eventListener
 
 
+taskList.addEventListener('click', (e) => {
+    if (e.target.classList.contains('save-btn')) {
+        handleSave(e);
+    } else if (e.target.classList.contains('cancel-btn')) {
+        handleCancel(e);
+    }
+})
+
+
+// EVENT LISTENER  FOR EDIT-MODE
+taskList.addEventListener('dblclick', (e) => {
+    if (e.target.tagName === 'SPAN') {
+        enterEditMode(e.target.closest('.task-item'))
+    }
+})
+
+
 
 // Function for adding task
 function addTask(event) {
@@ -30,6 +47,7 @@ function addTask(event) {
 }
 
 
+
 // Function for completion and deletion task
 function taskListManager(e) {
     const target = e.target; // target set
@@ -38,23 +56,19 @@ function taskListManager(e) {
     // Check if it has a class attribute is delete
     if (target.classList.contains('delete-btn')) {  
         taskItem.remove();
-    } else if (target.tagName === 'SPAN') { // Detect if it a span element
+    } else if (target.tagName === 'SPAN') {     // Detect if it a span element
         taskItem.classList.toggle('completed');
     }
-
+    
     // Save to local storage
     saveTasks();
 }
 
 
-// EVENT LISTENER FOR SAVE/CANCEL
-taskList.addEventListener('click', (e) => {
-    if (e.target.classList.contains('save-btn')) {
-        handleSave(e);
-    } else if (e.target.classList.contains('cancel-btn')) {
-        handleCancel(e);
-    }
-})
+
+// EVENT LISTENER FOR SAVE/CANCEL (EDIT-MODE)
+
+
 
 
 function saveTasks() {
@@ -67,6 +81,7 @@ function saveTasks() {
     } )
     localStorage.setItem('tasks', JSON.stringify(tasks));
 }
+
 
 
 function loadTasks() {
@@ -91,12 +106,7 @@ function loadTasks() {
 }
 
 
-// EVENT LISTENER  FOR EDIT-MODE
-taskList.addEventListener('dblclick', (e) => {
-    if (e.target.tagName === 'SPAN') {
-        enterEditMode(e.target.closest('.task-item'))
-    }
-})
+
 
 
 //  Edit-mode function 
@@ -108,13 +118,14 @@ function enterEditMode(taskItem) {
     taskItem.classList.add('edit-mode') // Add visual effect
 
     taskItem.innerHTML = `
-        <input class="edit-input" type="text" value="${currentText}"> 
+        <input class="edit-input" type="text" value="${currentText}" autofocus> 
         <button class="save-btn">Save</button>
         <button class="cancel-btn">Cancel</button>
     `;
     // Auto-focus the input field (ux improvement) 
-    taskItem.querySelector('.edit-mode').focus();
+    taskItem.querySelector('.edit-input').focus();
 }
+
 
 
 
@@ -133,6 +144,8 @@ function handleSave(e) {
     //Update localStorage
     saveTasks();
 }
+
+
 
 function handleCancel(e) {
     const taskItem = e.target.closest('.task-item'); // Fix selector
