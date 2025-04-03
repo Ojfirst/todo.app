@@ -37,6 +37,7 @@
     Border: 2px solid #ddd;
     Border-radius: 5px;
     Font-size: 16px;
+    outline: none;
   }
   
   Button {
@@ -90,10 +91,18 @@
     Border-radius: 5px;
     Font-size: 16px;
     width: 100%;
+    outline:  none;
   }
 
-  .edit-input:focus {
-    outline: none;
+  .edit-input:invalid {
+    border-color: #f4f4f4;
+    animation: shake 0.5s;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5); }
+    75% { transform: translateX(5); }
   }
 
   .edit-mode button {
@@ -106,6 +115,35 @@
     Cursor: pointer;
     Font-weight: bold;
   }
+
+
+  .error-message {
+    color: #ff4444;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 4px;
+    background: #ffeeee;
+    transition: opacity 0.3s;
+  }
+  
+  .error-message.hidden {
+    opacity: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+  }
+  
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+  
+  .edit-input:invalid {
+    border-color: #ff4444;
+    animation: shake 0.5s;
+  }
+  
 
 
 

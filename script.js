@@ -8,7 +8,7 @@ const taskList = document.getElementById('task-list') // unorder list
 taskForm.addEventListener('submit', addTask);   // form eventListener
 taskList.addEventListener('click', taskListManager);    // list eventListener
 
-
+// EVENT LISTENER FOR SAVE/CANCEL (EDIT-MODE)
 taskList.addEventListener('click', (e) => {
     if (e.target.classList.contains('save-btn')) {
         handleSave(e);
@@ -22,6 +22,14 @@ taskList.addEventListener('click', (e) => {
 taskList.addEventListener('dblclick', (e) => {
     if (e.target.tagName === 'SPAN') {
         enterEditMode(e.target.closest('.task-item'))
+    }
+})
+
+taskList.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        handleSave(e)
+    } else if (e.key == 'Escape') {
+        handleCancel(e)
     }
 })
 
@@ -66,14 +74,11 @@ function taskListManager(e) {
 
 
 
-// EVENT LISTENER FOR SAVE/CANCEL (EDIT-MODE)
-
-
 
 
 function saveTasks() {
     const tasks = [];
-    document.querySelectorAll('.task-item').forEach((task) => {
+    document.querySelectorAll('.task-item').forEach(task => {
       tasks.push({
                   text: task.querySelector('span').textContent,
                   completed: task.classList.contains('completed')
@@ -105,7 +110,15 @@ function loadTasks() {
     })
 }
 
+function showError (message) {
+    const errorEl = document.getElementById('error-message');
+    errorEl.textContent = message;
+    errorEl.classList.remove('hidden');
 
+    setTimeout(() => {
+        errorEl.classList.add('hidden')
+    }, 3000);
+}
 
 
 
@@ -129,24 +142,6 @@ function enterEditMode(taskItem) {
 
 
 
-function handleSave(e) {
-    const taskItem = e.target.closest('.task-item'); // gets the parent node
-    const editInput = document.querySelector('.edit-input');  // gets the input element 
-    const editedText = editInput.value.trim() ; // gets user's input value and remove whitespace
-
-    //Removes edit-mode
-    taskItem.classList.remove('edit-mode')
-    // Add update user's value
-    taskItem.innerHTML = `
-            <span>${editedText}</span>
-            <button class="delete-btn">Delete</button>`;
-
-    //Update localStorage
-    saveTasks();
-}
-
-
-
 function handleCancel(e) {
     const taskItem = e.target.closest('.task-item'); // Fix selector
     const originalText = taskItem.getAttribute('data-original-text'); //Get stored text
@@ -163,6 +158,30 @@ function handleCancel(e) {
 
 
 
+function handleSave(e) {
+    const taskItem = e.target.closest('.task-item'); // gets the parent node
+    const editInput = document.querySelector('.edit-input');  // gets the input element 
+    const editedText = editInput.value.trim() ; // gets user's input value and remove whitespace
+
+    //Validation: Revert if empty
+    if (!editedText) {
+
+        showError("Task can't be empty!")
+        editInput.focus();
+        handleCancel(e); // Reuse cancel logic
+        return; // Exit early
+    }
+
+    //Removes edit-mode
+    taskItem.classList.remove('edit-mode')
+    // Add update user's value
+    taskItem.innerHTML = `
+            <span>${editedText}</span>
+            <button class="delete-btn">Delete</button>`;
+
+    //Update localStorage
+    saveTasks();
+}
 
 
 // Load saved tasks on page load
