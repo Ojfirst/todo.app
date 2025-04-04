@@ -1,7 +1,8 @@
 // Add task to the list when form is submitted
-const taskForm = document.getElementById('task-form')   // task form
-const taskInput= document.getElementById('task-input') // task input
-const taskList = document.getElementById('task-list') // unorder list
+const taskForm = document.getElementById('task-form');   // task form
+const taskInput= document.getElementById('task-input'); // task input
+const taskList = document.getElementById('task-list'); // unorder list
+const addBtn = document.getElementById('add-btn');
 
 
 // EVENT LISTENER
@@ -34,12 +35,28 @@ taskList.addEventListener('keydown', (e) => {
 })
 
 
+// Button state 
+function setBtnSate(btn, isDisabled) {
+    btn.disabled = isDisabled;
+}
+
+// Inital state: Disable if empty
+setBtnSate(addBtn, taskInput.value.trim() === '');
+
+// Real-time valuation on input
+taskInput.addEventListener('input', () => {
+    const isEmpty = taskInput.value.trim() === '';
+    setBtnSate(addBtn, isEmpty);
+})
+
+
 
 // Function for adding task
 function addTask(event) {
     event.preventDefault()  // Prevent page from reloading
 
     const taskText = taskInput.value.trim()
+
     // List Element for task
     let taskItem = document.createElement('li');    //List item created
     taskItem.setAttribute('class', 'task-item')     // list class set
@@ -52,6 +69,10 @@ function addTask(event) {
     
     //save to local storage
     saveTasks()
+
+
+    taskInput.value = '';
+    setBtnSate(addBtn, true);
 }
 
 
@@ -165,10 +186,8 @@ function handleSave(e) {
 
     //Validation: Revert if empty
     if (!editedText) {
-
         showError("Task can't be empty!")
         editInput.focus();
-        handleCancel(e); // Reuse cancel logic
         return; // Exit early
     }
 
