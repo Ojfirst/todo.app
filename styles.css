@@ -7,48 +7,48 @@
   }
   
   Body {
-    Font-family: 'Segoe UI', sans-serif;
-    Line-height: 1.6;
-    Background: #f5f5f5;
+    font-family: 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    background: #f5f5f5;
     color: #f5f5f5;
-    Margin: 0;
-    Padding: 20px;
+    margin: 0;
+    padding: 20px;
   }
   
   .container {
-    Max-width: 600px;
-    Margin: 0 auto;
-    Background: #333;
-    Padding: 20px;
-    Border-radius: 10px;
-    Box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+    background: #333;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
   #task-form {
-    Display: flex;
-    Gap: 10px;
-    Margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
   }
   
   #task-input {
-    Flex: 1;
-    Padding: 10px;
+    flex: 1;
+    padding: 10px;
     width: 100%;
-    Border: 2px solid #ddd;
-    Border-radius: 5px;
-    Font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
     outline: none;
   }
   
   Button {
-    Background: #ff8c00;
-    Color: black;
-    Border: none;
+    background: #ff8c00;
+    color: black;
+    border: none;
     margin-left: 5px;
-    Padding: 10px 20px;
-    Border-radius: 5px;
-    Cursor: pointer;
-    Font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
   }
 
   button:disabled {
@@ -58,32 +58,32 @@
   }
   
   #task-list {
-    List-style: none;
-    Padding: 0;
+    list-style: none;
+    padding: 0;
   }
   
   .task-item {
-    Display: flex;
-    Justify-content: space-between;
-    Align-items: center;
-    Padding: 10px;
-    Border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
   }
   
   .completed {
-    Opacity: 0.7;
-    Text-decoration: line-through;
+    opacity: 0.7;
+    text-decoration: line-through;
     color: var(--done);
 
   }
   
   .delete-btn {
-    Background: var(--danger);
-    Color: white;
-    Border: none;
-    Padding: 5px 10px;
-    Border-radius: 3px;
-    Cursor: pointer;
+    background: var(--danger);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
   }
 
   .edit-mode {
@@ -91,11 +91,11 @@
   }
 
   .edit-input {
-    Flex: 1;
-    Padding: 10px;
-    Border: 2px solid #ddd;
-    Border-radius: 5px;
-    Font-size: 16px;
+    flex: 1;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
     width: 100%;
     outline:  none;
   }
@@ -112,14 +112,14 @@
   }
 
   .edit-mode button {
-    Background: linear-gradient(90deg, #ff8c00, #ff2d55);
-    Color: white;
-    Border: none;
+    background: linear-gradient(90deg, #ff8c00, #ff2d55);
+    color: white;
+    border: none;
     margin-left: 5px;
-    Padding: 10px 20px;
-    Border-radius: 5px;
-    Cursor: pointer;
-    Font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
   }
 
 
@@ -148,6 +148,49 @@
   .edit-input:invalid {
     border-color: #ff4444;
     animation: shake 0.5s;
+  }
+  
+
+  .due-date {
+    font-size: 0.8rem;
+    color: #666;
+    margin-left: auto; /* Pushes to the right */
+    padding: 0 10px;
+  }
+  
+  .task-item.overdue {
+    border-left: 3px solid #ff4444;
+  }
+  
+  .task-item.overdue .due-date {
+    color: #ff4444;
+    font-weight: bold;
+  }
+  
+  #due-date {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+  }
+
+
+  @media (max-width: 767px) {
+    /* style mobile phone */
+    #task-form {
+      display: block;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    #task-form #task-input {
+      display:  flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      padding: 10px;
+      margin-bottom: 5px;
+      width: 95%;
+    }
   }
   
 
